@@ -6,6 +6,10 @@ export interface Listing {
   price: number | null;
   listingType: 'rent' | 'sale' | 'shortlet' | null;
   propertyType: string | null;
+  /** Ready to show: "Detached house", "For sale", "Live" */
+  propertyTypeLabel?: string | null;
+  listingTypeLabel?: string | null;
+  statusLabel?: string;
   bedrooms: number | null;
   bathrooms: number | null;
   furnished: boolean | null;

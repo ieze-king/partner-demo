@@ -143,12 +143,12 @@ export default function HomeHunt() {
             {shown.map(l => (
               <button key={l.id} className={`card ${flash.has(l.id) ? 'flash' : ''}`} onClick={() => setOpen(l)}>
                 <div className="card-img" style={{ backgroundImage: l.photoUrls[0] ? `url("${l.photoUrls[0]}")` : undefined }}>
-                  <span className="badge">{l.listingType ? DEAL[l.listingType] ?? 'Available' : 'Available'}</span>
+                  <span className="badge">{l.listingTypeLabel ?? (l.listingType ? DEAL[l.listingType] : null) ?? 'Available'}</span>
                 </div>
                 <div className="card-body">
                   <div className="price">{l.price ? naira(l.price) : 'Price on request'} <small>{l.listingType ? PER[l.listingType] : ''}</small></div>
                   <div className="title">{l.title}</div>
-                  <div className="meta">{[l.bedrooms ? `${l.bedrooms} bed` : null, l.bathrooms ? `${l.bathrooms} bath` : null, place(l)].filter(Boolean).join(' · ')}</div>
+                  <div className="meta">{[l.propertyTypeLabel, l.bedrooms ? `${l.bedrooms} bed` : null, l.bathrooms ? `${l.bathrooms} bath` : null, place(l)].filter(Boolean).join(' · ')}</div>
                   {l.organization && <div className="via">Listed by {l.organization.name}</div>}
                 </div>
               </button>
@@ -220,7 +220,8 @@ function ListingModal({ listing: l, onClose }: { listing: Listing; onClose: () =
           <h3>{l.title}</h3>
           <div className="meta">{place(l)}{l.organization ? ` · Listed by ${l.organization.name}` : ''}</div>
           <div className="facts">
-            <span className="fact">{l.listingType ? DEAL[l.listingType] ?? 'Available' : 'Available'}</span>
+            <span className="fact">{l.listingTypeLabel ?? (l.listingType ? DEAL[l.listingType] : null) ?? 'Available'}</span>
+            {l.propertyTypeLabel ? <span className="fact">{l.propertyTypeLabel}</span> : null}
             {l.bedrooms ? <span className="fact">{l.bedrooms} bedrooms</span> : null}
             {l.bathrooms ? <span className="fact">{l.bathrooms} bathrooms</span> : null}
             {l.furnished ? <span className="fact">Furnished</span> : null}

@@ -17,7 +17,10 @@ export interface Listing {
   photoUrls: string[];
   thumbUrls?: string[];
   features?: string[];
+  /** Older flag; not reliable for listings. Use `available`. */
   hasVacancy: boolean;
+  /** Every listing partners receive is on the market */
+  available?: boolean;
   availableUnits: number | null;
   organization: { id: string; name: string; verified: boolean } | null;
   variants?: { id: string; title: string; description: string | null; price: number | null; bedrooms: number | null; availableUnits: number | null }[];

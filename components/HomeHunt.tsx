@@ -11,6 +11,7 @@ const ENQUIRIES_KEY = 'homehunt_enquiries';
 
 const naira = (n: number) => `₦${n.toLocaleString('en-NG')}`;
 const PER: Record<string, string> = { rent: '/yr', shortlet: '/night', sale: '' };
+const DEAL: Record<string, string> = { rent: 'For rent', sale: 'For sale', shortlet: 'Short let' };
 const EVENT_LABEL: Record<string, string> = {
   'property.published': 'New listing',
   'property.updated': 'Listing updated',
@@ -142,7 +143,7 @@ export default function HomeHunt() {
             {shown.map(l => (
               <button key={l.id} className={`card ${flash.has(l.id) ? 'flash' : ''}`} onClick={() => setOpen(l)}>
                 <div className="card-img" style={{ backgroundImage: l.photoUrls[0] ? `url("${l.photoUrls[0]}")` : undefined }}>
-                  <span className={`badge ${l.hasVacancy ? '' : 'occupied'}`}>{l.hasVacancy ? 'Available' : 'Occupied'}</span>
+                  <span className="badge">{l.listingType ? DEAL[l.listingType] ?? 'Available' : 'Available'}</span>
                 </div>
                 <div className="card-body">
                   <div className="price">{l.price ? naira(l.price) : 'Price on request'} <small>{l.listingType ? PER[l.listingType] : ''}</small></div>
@@ -219,7 +220,7 @@ function ListingModal({ listing: l, onClose }: { listing: Listing; onClose: () =
           <h3>{l.title}</h3>
           <div className="meta">{place(l)}{l.organization ? ` · Listed by ${l.organization.name}` : ''}</div>
           <div className="facts">
-            <span className="fact">{l.hasVacancy ? 'Available now' : 'Occupied'}</span>
+            <span className="fact">{l.listingType ? DEAL[l.listingType] ?? 'Available' : 'Available'}</span>
             {l.bedrooms ? <span className="fact">{l.bedrooms} bedrooms</span> : null}
             {l.bathrooms ? <span className="fact">{l.bathrooms} bathrooms</span> : null}
             {l.furnished ? <span className="fact">Furnished</span> : null}

@@ -20,6 +20,7 @@ export interface Listing {
   longitude: number | null;
   photoUrls: string[];
   thumbUrls?: string[];
+  videoUrls?: string[];
   features?: string[];
   /** Older flag; not reliable for listings. Use `available`. */
   hasVacancy: boolean;

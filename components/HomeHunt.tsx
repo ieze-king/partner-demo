@@ -142,7 +142,8 @@ export default function HomeHunt() {
           <div className="grid">
             {shown.map(l => (
               <button key={l.id} className={`card ${flash.has(l.id) ? 'flash' : ''}`} onClick={() => setOpen(l)}>
-                <div className="card-img" style={{ backgroundImage: l.photoUrls[0] ? `url("${l.photoUrls[0]}")` : undefined }}>
+                <div className="card-img" style={{ backgroundImage: media(l).photos[0] ? `url("${media(l).photos[0]}")` : undefined }}>
+                  {!media(l).photos[0] && media(l).video && <video className="fill" src={`${media(l).video}#t=0.5`} muted playsInline preload="metadata" />}
                   <span className="badge">{l.listingTypeLabel ?? (l.listingType ? DEAL[l.listingType] : null) ?? 'Available'}</span>
                 </div>
                 <div className="card-body">
@@ -177,10 +178,19 @@ export default function HomeHunt() {
   );
 }
 
+// Getpropool sends images in photoUrls and videos in videoUrls. A listing with only videos shows
+// the first frame of its first video.
+const VIDEO = /\.(mp4|mov|m4v|webm|3gp)(\?.*)?$/i;
+function media(l: Listing) {
+  const photos = l.photoUrls.filter(u => !VIDEO.test(u));
+  const videos = [...l.photoUrls.filter(u => VIDEO.test(u)), ...(l.videoUrls ?? [])];
+  return { photos, video: videos[0] ?? null };
+}
+
 function ListingModal({ listing: l, onClose }: { listing: Listing; onClose: () => void }) {
   const [photo, setPhoto] = useState(0);
   const [enquiry, setEnquiry] = useState<Enquiry | null>(null);
-  const photos = l.photoUrls.length ? l.photoUrls : [];
+  const { photos, video } = media(l);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
@@ -208,6 +218,7 @@ function ListingModal({ listing: l, onClose }: { listing: Listing; onClose: () =
     <div className="modal-bg" onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
       <div className="modal" role="dialog" aria-modal="true" aria-label={l.title}>
         <div className="modal-img" style={{ backgroundImage: photos[photo] ? `url("${photos[photo]}")` : undefined }}>
+          {!photos.length && video && <video className="fill" src={video} controls playsInline preload="metadata" />}
           <button className="close" onClick={onClose} aria-label="Close">×</button>
         </div>
         {photos.length > 1 && (

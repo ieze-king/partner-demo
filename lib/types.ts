@@ -26,7 +26,9 @@ export interface Listing {
   /** Every listing partners receive is on the market */
   available?: boolean;
   availableUnits: number | null;
-  organization: { id: string; name: string; verified: boolean } | null;
+  organization: { id: string | null; name: string; verified: boolean } | null;
+  // Getpropool's own listing: enquiries are answered by the Getpropool team
+  sponsored?: boolean;
   variants?: { id: string; title: string; description: string | null; price: number | null; bedrooms: number | null; availableUnits: number | null }[];
   enquiriesOpen: boolean;
   updatedAt: string;
